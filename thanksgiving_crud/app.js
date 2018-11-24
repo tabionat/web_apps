@@ -19,10 +19,11 @@ app.get('/hdood/', (req, res) => res.send('<title>DOOD IS CALLING YOU BACK</titl
 app.post('/add_recipe/', 
         function(req, res)
         {
-            if ( typeof res.body.edible == 'undefined' )
+            if ( typeof req.body.edible  == 'undefined' )
             {
                 console.log('no edible found')
-                res.send(`edible=${recipes.toString()}`)
+                SendResponse(res)
+                return
             }
 
             for ( var i = 0; i < recipes.length; i++)
@@ -31,16 +32,22 @@ app.post('/add_recipe/',
                if ( recipes[i] == req.body.edible )
                {
                    console.log(`${req.body.edible} already present`)
-                   res.send(`edible=${recipes.toString()}`)
+                   SendResponse(res)
                    return
                }
             }
 
             console.dir(`adding ${req.body.edible}....`)
             recipes.push(req.body.edible)
-            res.send(`edibles=${recipes.toString()}`)
+            SendResponse(res)
+            return
         } 
 ) 
 
 app.listen(port, '10.0.0.21', () => console.log(`Example app listening on port ${port}!`))
 
+function SendResponse(res)
+{
+    res.send(`edibles=${recipes.toString()}`)
+    // TODO: send a response as JSON
+}
